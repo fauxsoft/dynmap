@@ -64,7 +64,7 @@ public class MapManager extends Thread {
     public MapManager(World world, Debugger debugger, ConfigurationNode configuration) {
         this.world = world;
         this.debugger = debugger;
-        this.staleQueue = new StaleQueue();
+        this.staleQueue = new SyncStaleQueue();
         this.updateQueue = new UpdateQueue();
 
         tileDirectory = combinePaths(DynmapPlugin.dataRoot, configuration.getString("tilespath", "web/tiles"));
