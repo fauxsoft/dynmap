@@ -38,10 +38,10 @@ public class ConcurrentStaleQueue implements StaleQueue {
         if (!staleTilesQueue.contains(m)) {
             int size = count.incrementAndGet();
             staleTilesQueue.offer(m);
-            log.info(Thread.currentThread().getName() + ": pushed stale tile: renderQueue.size=" + size);
+            log.fine(Thread.currentThread().getName() + ": pushed stale tile: renderQueue.size=" + size);
             return true;
         } else {
-            log.info(Thread.currentThread().getName() + ": skipped already stale tile");
+            log.fine(Thread.currentThread().getName() + ": skipped already stale tile");
         }
         return false;
     }
@@ -59,9 +59,9 @@ public class ConcurrentStaleQueue implements StaleQueue {
         MapTile tile = staleTilesQueue.poll();
         if (tile != null) {
             int size = count.decrementAndGet();
-            log.info(Thread.currentThread().getName() + ": popped stale tile: renderQueue.size=" + size);
+            log.fine(Thread.currentThread().getName() + ": popped stale tile: renderQueue.size=" + size);
         } else {
-            log.info(Thread.currentThread().getName() + ": staleTilesQueue.poll() empty queue");
+            log.fine(Thread.currentThread().getName() + ": staleTilesQueue.poll() empty queue");
         }
         return tile;
     }

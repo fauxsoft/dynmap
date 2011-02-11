@@ -45,25 +45,24 @@ public class PlayerLocPolling extends Thread {
                     Thread.sleep(playerPollingWait * 4);
                 } catch (InterruptedException e) {
                 }
-                log.info(Thread.currentThread().getName() + ": full render in progress. sleeping");
+                log.fine(Thread.currentThread().getName() + ": full render in progress. sleeping");
                 continue;
             }
 
             Player[] players = server.getOnlinePlayers();
 
             if (players.length > 0)
-                log.info(Thread.currentThread().getName() + ": polling player locations");
+                log.fine(Thread.currentThread().getName() + ": polling player locations");
 
             for (Player p : players) {
                 Location pLoc = p.getLocation();
                 mgr.touch(pLoc.getBlockX(), pLoc.getBlockY(), pLoc.getBlockZ());
             }
-            
+
             try {
                 Thread.sleep(playerPollingWait);
             } catch (InterruptedException e) {
             }
-
         }
     }
 }

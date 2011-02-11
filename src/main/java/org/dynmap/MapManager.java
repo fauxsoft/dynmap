@@ -240,7 +240,7 @@ public class MapManager extends Thread {
                 // stop processing stale tiles while a full render is in
                 // progress
                 if (fullRenderInProgress.get()) {
-                    log.info(Thread.currentThread().getName() + ": full render in progress. sleeping");
+                    log.fine(Thread.currentThread().getName() + ": full render in progress. sleeping");
                     try {
                         Thread.sleep(renderWait * 4);
                     } catch (InterruptedException e) {
