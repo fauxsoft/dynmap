@@ -33,10 +33,6 @@ public class PlayerLocPolling extends Thread {
     public void destroy() {
         running = false;
         log.info(PlayerLocPolling.class.getSimpleName() + ": shutting down...");
-        try {
-            this.join();
-        } catch (InterruptedException e) {
-        }
     }
 
     @Override
