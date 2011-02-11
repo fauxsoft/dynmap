@@ -38,7 +38,7 @@ public class PlayerLocPolling extends Thread {
     @Override
     public void run() {
         running = true;
-        int playerPollingWait = configuration.getInt("playerpollingwait", 30000);
+        int playerPollingWait = configuration.getInt("playerlocationinterval", 30000);
         while (running) {
             if (mgr.fullRenderInProgress.get()) {
                 try {
