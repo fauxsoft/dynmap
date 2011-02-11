@@ -13,4 +13,7 @@ public interface StaleQueue {
 	 */
 	public abstract MapTile popStaleTile();
 
+	public abstract boolean removeStaleTile(MapTile m);
+	
+	public abstract void clear();
 }

@@ -56,4 +56,23 @@ public class SyncStaleQueue implements StaleQueue {
             }
         }
     }
+
+	@Override
+	public boolean removeStaleTile(MapTile m) {
+		synchronized (MapManager.lock) {
+			if (staleTiles.remove(m)) {
+				staleTilesQueue.remove(m);
+				return true;
+			}
+			return false;
+		}
+	}
+
+    @Override
+    public void clear() {
+        synchronized (MapManager.lock) {
+            staleTiles.clear();
+            staleTilesQueue.clear();
+        }
+    }
 }

@@ -39,6 +39,8 @@ public class DynmapPlugin extends JavaPlugin {
 
     public static File dataRoot;
 
+    private PlayerLocPolling playerLocPollingThread;
+
     public DynmapPlugin(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
         super(pluginLoader, instance, desc, folder, plugin, cLoader);
         dataRoot = folder;
@@ -71,9 +73,7 @@ public class DynmapPlugin extends JavaPlugin {
         {
             String address = configuration.getString("webserver-bindaddress", "0.0.0.0");
             try {
-                bindAddress = address.equals("0.0.0.0")
-                        ? null
-                        : InetAddress.getByName(address);
+                bindAddress = address.equals("0.0.0.0") ? null : InetAddress.getByName(address);
             } catch (UnknownHostException e) {
                 bindAddress = null;
             }
@@ -97,6 +97,7 @@ public class DynmapPlugin extends JavaPlugin {
     }
 
     public void onDisable() {
+        playerLocPollingThread.destroy();
         mapManager.stopManager();
 
         if (webServer != null) {
@@ -111,19 +112,9 @@ public class DynmapPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
     }
-    
-	public void scheduleEvents() {
-		int renderInterval = configuration.getInt("renderinterval", 30);
-		final Server server = getServer();
-		final MapManager mgr = mapManager;
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-			@Override
-			public void run() {
-				for (Player p : server.getOnlinePlayers()) {
-					Location pLoc = p.getLocation();
-					mgr.touch(pLoc.getBlockX(), pLoc.getBlockY(), pLoc.getBlockZ());
-				}
-			}
-		}, 0, renderInterval * 20);
-	}
+
+    public void scheduleEvents() {
+        playerLocPollingThread = new PlayerLocPolling(configuration, getServer(), getMapManager());
+        playerLocPollingThread.start();
+    }
 }
